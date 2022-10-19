@@ -13,3 +13,5 @@ ex.
         "password": "yourpassword"
     }
 }
+
+Also, the API key for the Open Weather Map API will be provided in a json file called "API_KEY.json" inside the top-level directory "config".

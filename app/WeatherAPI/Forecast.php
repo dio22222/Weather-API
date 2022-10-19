@@ -8,7 +8,7 @@
 
         private static $api_key;
 
-        private static $response_limit = '8';
+        private static $response_limit = '1';
 
         public function __construct()
         {
@@ -47,15 +47,39 @@
             $response = curl_exec($curl);
             $error = curl_error($curl);
 
-            var_dump($response,$error);
-
             curl_close($curl);
+
+            // Decode JSON Responses to Associative Arrays
+            $response = json_decode($response, true);
+            $error = json_decode($error, true);
+
+            if ($response['cod'] == '404') {
+
+                $results['code'] = 404;
+                $results['success'] = false;
+                $results['message'] = $response['message'];
+
+                return $results;
+
+                exit();
+
+            }
+
+            $results['code'] = $response['cod'];
+            $results['success'] = true;
+            $results['forecast_weather_status'] = $response['list'][0]['weather'][0]['main'];
+            $results['forecast_weather_description'] = $response['list'][0]['weather'][0]['description'];
+            $results['forecast_main'] = $response['list'][0]['main'];
+            $results['forecast_clouds'] = $response['list'][0]['clouds'];
+            $results['forecast_wind'] = $response['list'][0]['wind'];
+            $results['forecast_visibility'] = $response['list'][0]['visibility'];
+
+            return $results;
+
+            var_dump($response,$error);
 
         }
 
     }
-
-    $forecast = new Forecast();
-    $forecast->get_forecast('thessaloniki');
 
 ?>

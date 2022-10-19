@@ -85,16 +85,64 @@
             $results['success'] = true;
 
             // For each item in the list of Time-stamped Forecasts returned
-            foreach($response['list'] as $index => $timestamp) {
+            foreach($response['list'] as $index => $forecast) {
+
+                // Convert Temperature Parameter
+                [$celcius, $fahrenheit] = $this->convert_kelvin($forecast['main']['temp']);
+
+                // Pass Converted Data as Extra Parameters
+                $forecast['main']['temp'] = array(
+
+                    'kelvin' => $forecast['main']['temp'],
+                    'celcius' => $celcius,
+                    'fahrenheit' => $fahrenheit,
+
+                );
+
+                // Convert Feels Like Parameter
+                [$celcius, $fahrenheit] = $this->convert_kelvin($forecast['main']['feels_like']);
+
+                // Pass Converted Data as Extra Parameters
+                $forecast['main']['feels_like'] = array(
+
+                    'kelvin' => $forecast['main']['feels_like'],
+                    'celcius' => $celcius,
+                    'fahrenheit' => $fahrenheit,
+
+                );
+
+                // Convert Minimum Temperature Parameter
+                [$celcius, $fahrenheit] = $this->convert_kelvin($forecast['main']['temp_min']);
+
+                // Pass Converted Data as Extra Parameters
+                $forecast['main']['temp_min'] = array(
+
+                    'kelvin' => $forecast['main']['temp_min'],
+                    'celcius' => $celcius,
+                    'fahrenheit' => $fahrenheit,
+
+                );
                 
-                $results['timestamp_' . $index] = array( 
-                    'datetime' => $timestamp['dt_txt'],
-                    'forecast_weather_status' => $timestamp['weather'][0]['main'],
-                    'forecast_weather_description' => $timestamp['weather'][0]['description'],
-                    'forecast_main' => $timestamp['main'],
-                    'forecast_clouds' => $timestamp['clouds'],
-                    'forecast_wind' => $timestamp['wind'],
-                    'forecast_visibility' => $timestamp['visibility'],
+                // Convert Maximum Temperature Parameter
+                [$celcius, $fahrenheit] = $this->convert_kelvin($forecast['main']['temp_max']);
+
+                // Pass Converted Data as Extra Parameters
+                $forecast['main']['temp_max'] = array(
+
+                    'kelvin' => $forecast['main']['temp_max'],
+                    'celcius' => $celcius,
+                    'fahrenheit' => $fahrenheit,
+
+                );
+                
+                $results['forecast_' . $index] = array( 
+                    'datetime' => $forecast['dt_txt'],
+                    'weather_status' => $forecast['weather'][0]['main'],
+                    'weather_description' => $forecast['weather'][0]['description'],
+                    'main' => $forecast['main'],
+                    'clouds' => $forecast['clouds'],
+                    'wind' => $forecast['wind'],
+                    'visibility' => $forecast['visibility'],
                 );
 
             }
@@ -105,17 +153,28 @@
 
             return $results;
 
-            var_dump($response,$error);
-
         }
 
         // Format Unix Time to Human-Readable Format, & optionally add a Unix Timezone Shift
         private function convert_unix_to_datetime($unix_time, $timezone_shift = 0) {
 
-            $unix_time += $timezone_shift; 
+            $unix_time += $timezone_shift - 7200;
 
             return date("d/m/y H:i:s", $unix_time);
 
+        }
+
+        // Convert Temperature From Kelvin to Celcius & Fahrenheit
+        private function convert_kelvin($kelvin) {
+
+            $celcius = $kelvin - 273.15;
+            $fahrenheit = 1.8 * $celcius + 32;
+
+            // Convert precision to 2 Decimal Numbers
+            $celcius = floor($celcius*100)/100;
+            $fahrenheit = floor($fahrenheit*100)/100;
+
+            return [$celcius, $fahrenheit];
         }
 
     }

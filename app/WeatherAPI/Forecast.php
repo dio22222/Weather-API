@@ -8,7 +8,7 @@
 
         private static $api_key;
 
-        private static $response_limit = '2';
+        private static $response_limit = '8';
 
         public function __construct()
         {
@@ -87,6 +87,9 @@
             // For each item in the list of Time-stamped Forecasts returned
             foreach($response['list'] as $index => $forecast) {
 
+                // Convert Time of Forecast from UTC to Local Time
+                $local_time = $this->convert_unix_to_datetime($forecast['dt'], $response['city']['timezone']);
+
                 // Convert Temperature Parameter
                 [$celcius, $fahrenheit] = $this->convert_kelvin($forecast['main']['temp']);
 
@@ -136,7 +139,8 @@
                 );
                 
                 $results['forecast_' . $index] = array( 
-                    'datetime' => $forecast['dt_txt'],
+                    'datetime_utc' => $forecast['dt_txt'],
+                    'datetime_local' => $local_time,
                     'weather_status' => $forecast['weather'][0]['main'],
                     'weather_description' => $forecast['weather'][0]['description'],
                     'main' => $forecast['main'],
@@ -148,8 +152,10 @@
             }
 
             // Location Information
-            $results['sunset'] = $this->convert_unix_to_datetime($response['city']['sunset'], $response['city']['timezone']);
-            $results['sunrise'] = $this->convert_unix_to_datetime($response['city']['sunrise'], $response['city']['timezone']);
+            $results['sunset_utc'] = $this->convert_unix_to_datetime($response['city']['sunset']);
+            $results['sunrise_utc'] = $this->convert_unix_to_datetime($response['city']['sunrise']);
+            $results['sunset_local'] = $this->convert_unix_to_datetime($response['city']['sunset'], $response['city']['timezone']);
+            $results['sunrise_local'] = $this->convert_unix_to_datetime($response['city']['sunrise'], $response['city']['timezone']);
 
             return $results;
 
@@ -158,9 +164,11 @@
         // Format Unix Time to Human-Readable Format, & optionally add a Unix Timezone Shift
         private function convert_unix_to_datetime($unix_time, $timezone_shift = 0) {
 
-            $unix_time += $timezone_shift - 7200;
+            // Time zone shift provided by the OpenWeatherMap API need to be subtracted by 7200 to be correct.
+            if($timezone_shift != 0) $unix_time += $timezone_shift - 7200;
 
-            return date("d/m/y H:i:s", $unix_time);
+            // return date("d/m/y H:i:s", $unix_time);
+            return date("yy-m-d H:i:s", $unix_time);
 
         }
 

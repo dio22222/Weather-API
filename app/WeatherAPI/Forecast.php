@@ -8,7 +8,7 @@
 
         private static $api_key;
 
-        private static $response_limit = '1';
+        private static $response_limit = '2';
 
         public function __construct()
         {
@@ -49,10 +49,25 @@
 
             curl_close($curl);
 
-            // Decode JSON Responses to Associative Arrays
+            // Decode JSON Response to Associative Array
             $response = json_decode($response, true);
-            $error = json_decode($error, true);
 
+            // If there was an error in the Request
+            if ($error != "") {
+
+                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502
+                $results['code'] = 502;
+
+                $results['success'] = false;
+                $results['message'] = $error;
+
+                return $results;
+
+                exit();
+
+            }
+
+            // If the recourse was not found
             if ($response['cod'] == '404') {
 
                 $results['code'] = 404;
@@ -65,18 +80,41 @@
 
             }
 
+            // Response Information
             $results['code'] = $response['cod'];
             $results['success'] = true;
-            $results['forecast_weather_status'] = $response['list'][0]['weather'][0]['main'];
-            $results['forecast_weather_description'] = $response['list'][0]['weather'][0]['description'];
-            $results['forecast_main'] = $response['list'][0]['main'];
-            $results['forecast_clouds'] = $response['list'][0]['clouds'];
-            $results['forecast_wind'] = $response['list'][0]['wind'];
-            $results['forecast_visibility'] = $response['list'][0]['visibility'];
+
+            // For each item in the list of Time-stamped Forecasts returned
+            foreach($response['list'] as $index => $timestamp) {
+                
+                $results['timestamp_' . $index] = array( 
+                    'datetime' => $timestamp['dt_txt'],
+                    'forecast_weather_status' => $timestamp['weather'][0]['main'],
+                    'forecast_weather_description' => $timestamp['weather'][0]['description'],
+                    'forecast_main' => $timestamp['main'],
+                    'forecast_clouds' => $timestamp['clouds'],
+                    'forecast_wind' => $timestamp['wind'],
+                    'forecast_visibility' => $timestamp['visibility'],
+                );
+
+            }
+
+            // Location Information
+            $results['sunset'] = $this->convert_unix_to_datetime($response['city']['sunset'], $response['city']['timezone']);
+            $results['sunrise'] = $this->convert_unix_to_datetime($response['city']['sunrise'], $response['city']['timezone']);
 
             return $results;
 
             var_dump($response,$error);
+
+        }
+
+        // Format Unix Time to Human-Readable Format, & optionally add a Unix Timezone Shift
+        private function convert_unix_to_datetime($unix_time, $timezone_shift = 0) {
+
+            $unix_time += $timezone_shift; 
+
+            return date("d/m/y H:i:s", $unix_time);
 
         }
 

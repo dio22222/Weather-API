@@ -40,9 +40,12 @@
 
     $city = $_GET['city'];
 
+    // Check if optional parameter 'limit' exists in the Request, or else set Default Limit to 9
+    isset($_GET['limit']) ? $limit = $_GET['limit'] : $limit = '9';
+
     $forecast = new Forecast();
 
-    $results = $forecast->get_forecast($city);
+    $results = $forecast->get_forecast($city, $limit);
 
     http_response_code($results['code']);
 

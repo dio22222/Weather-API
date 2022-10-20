@@ -34,7 +34,7 @@
 
         }
 
-        protected function call_api(Endpoint $e, $city, $response_limit = '1') {
+        protected function call_api(Endpoint $e, $city, $response_limit) {
 
             $base_url = 'api.openweathermap.org/data/2.5/forecast?';
 

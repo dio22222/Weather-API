@@ -38,11 +38,16 @@
 
             $base_url = 'api.openweathermap.org/data/2.5/forecast?';
 
+            $query = $base_url . 'appid=' . self::$api_key;
+
             switch ($e) {
 
                 case Endpoint::forecast:
-                    $query = $base_url . "q=" . $city . '&' . "cnt=" . $response_limit . "&" . "appid=" . self::$api_key;
+                    $query .= '&q=' . $city . '&' . 'cnt=' . $response_limit;
                     break;
+
+                case Endpoint::weather:
+                    $query .= '&q=' . $city;
 
             }
 

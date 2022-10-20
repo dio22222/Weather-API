@@ -51,8 +51,6 @@
 
     unset($results['code']);
 
-    // print_r($results);
-
     $response = json_encode($results);
 
     print_r(json_encode($results));

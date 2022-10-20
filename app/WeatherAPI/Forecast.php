@@ -138,6 +138,7 @@
 
                 );
                 
+                // Construct Forecast Results Array
                 $results['forecast_' . $index] = array( 
                     'datetime_utc' => $forecast['dt_txt'],
                     'datetime_local' => $local_time,

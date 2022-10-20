@@ -2,7 +2,7 @@
 
     namespace WeatherAPI;
 
-    class DataCollector {
+    class DataCollector extends API {
 
         
 

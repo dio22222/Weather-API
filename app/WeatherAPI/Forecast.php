@@ -2,80 +2,18 @@
 
     namespace WeatherAPI;
 
-    class Forecast {
-
-        private static $base_url = 'api.openweathermap.org/data/2.5/forecast?';
-
-        private static $api_key;
+    class Forecast extends API{
 
         private static $response_limit = '8';
 
-        public function __construct()
-        {
-            $this->get_api_key();
-        }
-
-        private function get_api_key() {
-
-            $path = __DIR__.'/../../config/API_KEY.json';
-            
-            self::$api_key = file_get_contents($path);
-
-            // Decode JSON key to an Associative Array & Destruct to a String
-            ['API_KEY' => self::$api_key] = json_decode(self::$api_key, true);
-
-        }
-
         public function get_forecast($city) {
 
-            $curl = curl_init();
+            // Call OpenWeatherMap API
+            $response = $this->call_api(Endpoint::forecast, $city, self::$response_limit);
 
-            curl_setopt_array($curl, array(
-                // Construct URL
-                CURLOPT_URL => self::$base_url . "q=" . $city . '&' . "cnt=" . self::$response_limit . "&" . "appid=" . self::$api_key,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 30,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_HTTPHEADER => array(
-                    "cache-control: no-cache",
-                    "connection: keep-alive",
-                    "accept: application/json",
-                ),
-            ));
+            if (!$response['success']) {
 
-            $response = curl_exec($curl);
-            $error = curl_error($curl);
-
-            curl_close($curl);
-
-            // Decode JSON Response to Associative Array
-            $response = json_decode($response, true);
-
-            // If there was an error in the Request
-            if ($error != "") {
-
-                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502
-                $results['code'] = 502;
-
-                $results['success'] = false;
-                $results['message'] = $error;
-
-                return $results;
-
-                exit();
-
-            }
-
-            // If the recourse was not found
-            if ($response['cod'] == '404') {
-
-                $results['code'] = 404;
-                $results['success'] = false;
-                $results['message'] = $response['message'];
-
-                return $results;
-
+                return $response;
                 exit();
 
             }

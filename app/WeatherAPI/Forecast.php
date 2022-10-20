@@ -4,7 +4,7 @@
 
     class Forecast extends API{
 
-        public function get_forecast($city, $response_limit) {
+        public function get_forecast($city, $response_limit = '9') {
 
             // Call OpenWeatherMap API
             $response = $this->call_api(Endpoint::forecast, $city, $response_limit);

@@ -9,7 +9,7 @@
 
     }
 
-    class API {
+    class API extends Base {
 
         protected static $api_key;
 

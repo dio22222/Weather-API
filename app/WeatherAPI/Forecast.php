@@ -164,8 +164,11 @@
         // Format Unix Time to Human-Readable Format, & optionally add a Unix Timezone Shift
         private function convert_unix_to_datetime($unix_time, $timezone_shift = 0) {
 
-            // Time zone shift provided by the OpenWeatherMap API need to be subtracted by 7200 to be correct.
-            if($timezone_shift != 0) $unix_time += $timezone_shift - 7200;
+            // Time zone shift & UTC time provided by the OpenWeatherMap API need to be subtracted by 7200 to be correct.
+            $unix_time -= 7200;
+
+            // If a timezone shift is provided, add the shift to UTC time to convert it to local time.
+            if($timezone_shift != 0) $unix_time += $timezone_shift;
 
             // return date("d/m/y H:i:s", $unix_time);
             return date("yy-m-d H:i:s", $unix_time);

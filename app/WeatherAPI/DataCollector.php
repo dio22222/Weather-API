@@ -18,9 +18,12 @@
 
             if (!$response['success']) {
 
-                $response['date'] = date('yy-m-d');
+                // Construct Resposnse to Log
+                $results['date'] = date('yy-m-d');
+                $results['city'] = strtolower($city);
+                $results['message'] = $response['message'];
 
-                return $response;
+                return $results;
                 
                 exit();
 
@@ -77,6 +80,8 @@
             // Construct Results Array to Be saved in the Database
             $parameters = array(
 
+                'city_name_given' => $city,
+                'official_city_name' => $response['name'],
                 'date' => $this->convert_unix_to_date($response['dt']),
                 'temp_kelvin' => $response['main']['temp']['kelvin'],
                 'temp_celcius' => $response['main']['temp']['celcius'],
@@ -102,9 +107,9 @@
             // Insert Data into Database
             $success = $this->insert('forecast', $parameters);
 
-            // Construct Log Resposnse
+            // Construct Resposnse to Log
             $results['date'] = $parameters['date'];
-            $results['success'] = $success;
+            $results['city'] = strtolower($city);
 
             $success ? $results['message'] = 'Data were Saved Successufuly' : $results['message'] = 'There was an Error with the Database';
 

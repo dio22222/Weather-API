@@ -14,7 +14,7 @@ $cities = array(
     'patras',
     'heraklion',
     'ioannina',
-    'larissa',
+    'larisa',
     'volos',
 
 );

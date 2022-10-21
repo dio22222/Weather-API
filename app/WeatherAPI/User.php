@@ -6,6 +6,28 @@ use WeatherAPI\Base;
 
 class User extends Base {
 
+    public function get_id_and_password($username) {
+
+        return $this->fetch('SELECT id, password FROM user WHERE username = :username', [':username' => $username]);
+
+    }
+
+    public function login($username, $password) {
+
+        $user = $this->get_id_and_password($username);
+
+        if(password_verify($password, $user['password'])) {
+
+            return $user['id'];
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
     public function register($username, $email, $password, $password_repeat) {
 
         $response['code'] = 200;

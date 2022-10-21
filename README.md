@@ -11,14 +11,12 @@ A "db_config.json" file inside the top-level folder "config" with your database 
 
 ex.
 {
-    ```
     "database": {\
         "host": "127.0.0.1:3306",\
         "dbname": "weather_api_db",\
         "username": "yourusername",\
         "password": "yourpassword"\
     }\
-    ```
 }
 
 The API key for the Open Weather Map API will be provided in a json file called "API_KEY.json" inside the top-level directory "config".

@@ -13,22 +13,27 @@ class SearchForecast extends Base {
             ':date' => $date,
         ];
 
-        $results = $this->fetch($query, $parameters);
+        $response = $this->fetch($query, $parameters);
 
-        if (!$results) {
+        if (!$response) {
 
-            $results = array(
-                'message' => 'No Historical Forecast Data were found for that particular City and Date',
-            );
+            $results['code'] = 404;
+            $results['success'] = false;
+            $results['message'] = 'No Historical Forecast Data were found for that particular City and Date';
 
             return $results;
 
         }
 
         // Delete Row ID
-        unset($results['id']);
+        unset($response['id']);
 
-        return $results;
+        $response = array(
+            'code' => 200,
+            'success' => true
+        ) + $response;
+
+        return $response;
 
     }
 

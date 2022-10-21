@@ -55,6 +55,9 @@
 
     $response = $search_forecast->get_historical_data($_GET['city'], $_GET['date']);
 
+    http_response_code($response['code']);
+    unset($response['code']);
+
     $response = json_encode($response);
 
     print_r($response);

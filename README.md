@@ -1,5 +1,5 @@
 # Weather-API
-A RESTful API written in PHP that provides you with Weather Forecast &amp; Historical Weather Data Search for over 200,000 cities, using the power of Open Weather Map API.
+A RESTful API written in PHP that provides you with Weather Forecast for over 200,000 cities &amp; Historical Weather Data Search for All Major Greek Cities, using the power of Open Weather Map API.
 
 # Build Instructions
 Your Project must inlclude a "db_config.json" file inside the top-level folder "config" with your database configuration.

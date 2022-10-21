@@ -34,7 +34,7 @@
 
         }
 
-        protected function call_api(Endpoint $e, $city, $response_limit) {
+        protected function call_api(Endpoint $e, $parameters) {
 
             $base_url = 'api.openweathermap.org/data/2.5/forecast?';
 
@@ -43,11 +43,11 @@
             switch ($e) {
 
                 case Endpoint::forecast:
-                    $query .= '&q=' . $city . '&' . 'cnt=' . $response_limit;
+                    $query .= '&q=' . $parameters['city'] . '&' . 'cnt=' . $parameters['response_limit'];
                     break;
 
                 case Endpoint::weather:
-                    $query .= '&q=' . $city;
+                    $query .= '&q=' . $parameters['city'];
 
             }
 

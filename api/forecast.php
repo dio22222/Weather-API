@@ -38,18 +38,16 @@
 
     }
 
-    $city = $_GET['city'];
-
     $forecast = new Forecast();
 
     // Check if optional parameter 'limit' exists in the Request
     if (isset($_GET['limit'])) {
-        
-        $results = $forecast->get_forecast($city, $limit);
+
+        $results = $forecast->get_forecast($_GET['city'], $_GET['limit']);
 
     } else {
 
-        $results = $forecast->get_forecast($city);
+        $results = $forecast->get_forecast($_GET['city']);
 
     }
 

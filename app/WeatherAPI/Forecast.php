@@ -6,8 +6,14 @@
 
         public function get_forecast($city, $response_limit = '9') {
 
+            // Contstruct Parameters Array
+            $parameters = array(
+                'city' => $city,
+                'response_limit' => $response_limit,
+            );
+
             // Call OpenWeatherMap API
-            $response = $this->call_api(Endpoint::forecast, $city, $response_limit);
+            $response = $this->call_api(Endpoint::forecast, $parameters);
 
             if (!$response['success']) {
 

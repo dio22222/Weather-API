@@ -2,7 +2,8 @@
 A RESTful API written in PHP that provides you with Weather Forecast for over 200,000 cities &amp; Historical Weather Data Search for All Major Greek Cities, using the power of Open Weather Map API.
 
 # Build Instructions
-Your Project must inlclude a "db_config.json" file inside the top-level folder "config" with your database configuration.
+Your Project must inlclude:
+A "db_config.json" file inside the top-level folder "config" with your database configuration.
 
 ex.
 {
@@ -14,9 +15,16 @@ ex.
     }
 }
 
-Also, the API key for the Open Weather Map API will be provided in a json file called "API_KEY.json" inside the top-level directory "config".
+The API key for the Open Weather Map API will be provided in a json file called "API_KEY.json" inside the top-level directory "config".
 
 ex.
 {
     "API_KEY": "yourapikey"
+}
+
+A Secret Key will be provided for Encoding & Decoding JWT Tokens, in a json file called "SECRET_KEY.json" inside the top-level directory "config".
+
+ex.
+{
+    "SECRET_KEY": "yoursecretkey"
 }

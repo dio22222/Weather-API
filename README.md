@@ -12,12 +12,12 @@ A "db_config.json" file inside the top-level folder "config" with your database 
 ex.
 {
     ```
-    "database": {
-        "host": "127.0.0.1:3306",
-        "dbname": "weather_api_db",
-        "username": "yourusername",
-        "password": "yourpassword"
-    }
+    "database": {\
+        "host": "127.0.0.1:3306",\
+        "dbname": "weather_api_db",\
+        "username": "yourusername",\
+        "password": "yourpassword"\
+    }\
     ```
 }
 

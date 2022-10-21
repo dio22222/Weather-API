@@ -42,6 +42,9 @@ ex.
 
 # Usage
 
+### Authentication
+To query an Authentication Protected endpoint you must provide a valid token in the Authorization Header (Bearer Token). You can acquire a token in the `login` endpoint. Read bellow for more information.
+
 #### Endpoints (/api/)
 - register.php\
   Method: `POST`\

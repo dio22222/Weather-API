@@ -12,6 +12,16 @@ class User extends Base {
         $response['code'] = 200;
         $response['success'] = false;
 
+        $user_doesnt_exist = $this->fetch('SELECT id FROM user WHERE email = :email OR username = :username', [':email' => $email, ':username' => $username]);
+
+        if ($user_doesnt_exist != false) {
+
+            $response['message'] = 'User with that E-mail or Username Already Exists';
+
+            return $response;
+
+        }
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
             $response['message'] = 'Not a Valid E-mail';

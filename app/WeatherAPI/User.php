@@ -2,7 +2,6 @@
 
 namespace WeatherAPI;
 
-use MessageFormatter;
 use WeatherAPI\Base;
 
 class User extends Base {

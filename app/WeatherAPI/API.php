@@ -36,20 +36,22 @@
 
         protected function call_api(Endpoint $e, $parameters) {
 
-            $base_url = 'api.openweathermap.org/data/2.5/forecast?';
-
-            $query = $base_url . 'appid=' . self::$api_key;
+            $base_url = 'api.openweathermap.org/data/2.5/';
 
             switch ($e) {
 
                 case Endpoint::forecast:
-                    $query .= '&q=' . $parameters['city'] . '&' . 'cnt=' . $parameters['response_limit'];
+                    $query = $base_url . 'forecast?&q=' . $parameters['city'] . '&' . 'cnt=' . $parameters['response_limit'];
                     break;
 
                 case Endpoint::weather:
-                    $query .= '&q=' . $parameters['city'];
+                    $query = $base_url . 'weather?&q=' . $parameters['city'];
+                    break;
 
             }
+
+            // Add API KEY to Query
+            $query .= '&appid=' . self::$api_key;
 
             $curl = curl_init();
 

@@ -32,3 +32,18 @@ ex.
 {
     "SECRET_KEY": "yoursecretkey"
 }
+
+# Usage
+
+Endpoints (/api/)
+- register.php
+  > Method: Post
+  > Description: Register an Account
+  ex. {
+    {
+        "username" : "yourusername",
+        "email" : "youremail",
+        "password" : "yourpassword",
+        "password-repeat" : "yourpassword"
+    }
+  }

@@ -135,7 +135,7 @@
             // Time zone shift & UTC time provided by the OpenWeatherMap API need to be subtracted by 7200 to be correct.
             $unix_time -= 7200;
 
-            return date("yy-m-d", $unix_time);
+            return date("Y-m-d", $unix_time);
 
         }
 

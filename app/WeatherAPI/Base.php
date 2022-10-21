@@ -67,7 +67,6 @@ class Base {
         // Bind Parameters
         foreach ($parameters as $key => &$value) {
             $statement->bindParam($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
-
         }
 
         // Execute Statement
@@ -75,6 +74,51 @@ class Base {
 
         // Fetch Data
         return $statement->fetchAll($type);
+    }
+
+    protected function insert($table_name, $parameters) {
+
+        // Construct SQL Query
+        $query = "INSERT INTO {$table_name} (";
+
+        $i = 0;
+        foreach($parameters as $key => $value) {
+
+            $query .= $key;
+
+            if (++$i !== count($parameters)) {
+                $query .= ',';
+            }
+        }
+
+        $query .= ") VALUES (";
+
+        $i = 0;
+        foreach($parameters as $key => $value) {
+
+            $query .= ':' . $key;
+
+            if (++$i !== count($parameters)) {
+                $query .= ',';
+            }
+
+        }
+
+        $query .= ')';
+
+        var_dump($query);
+
+        // Prepare Statement
+        $statement = $this->getPDO()->prepare($query);
+
+        // Bind Parameters
+        foreach ($parameters as $key => &$value) {
+            $statement->bindParam($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+
+        // Execute Statement
+        $success = $statement->execute();
+
     }
 
 }

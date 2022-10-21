@@ -80,7 +80,7 @@
             // Construct Results Array to Be saved in the Database
             $parameters = array(
 
-                'city_name_given' => $city,
+                'city_name_given' => strtolower($city),
                 'official_city_name' => $response['name'],
                 'date' => $this->convert_unix_to_date($response['dt']),
                 'temp_kelvin' => $response['main']['temp']['kelvin'],

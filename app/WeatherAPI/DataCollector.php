@@ -18,6 +18,8 @@
 
             if (!$response['success']) {
 
+                $response['date'] = date('yy-m-d');
+
                 return $response;
                 
                 exit();
@@ -97,9 +99,16 @@
 
             );
 
-            $this->insert('forecast', $parameters);
+            // Insert Data into Database
+            $success = $this->insert('forecast', $parameters);
 
-            return $parameters;
+            // Construct Log Resposnse
+            $results['date'] = $parameters['date'];
+            $results['success'] = $success;
+
+            $success ? $results['message'] = 'Data were Saved Successufuly' : $results['message'] = 'There was an Error with the Database';
+
+            return $results;
 
         }
 

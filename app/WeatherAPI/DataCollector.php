@@ -16,6 +16,16 @@
             // Call OpenWeatherMap API
             $response = $this->call_api(Endpoint::weather, $parameters);
 
+            if (!$response['success']) {
+
+                return $response;
+                
+                exit();
+
+            }
+
+            return $response;
+
         }
 
     }

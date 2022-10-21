@@ -2,7 +2,7 @@
 
     require '../boot/boot.php';
 
-    use WeatherAPI\User;
+    use WeatherAPI\DataCollector;
 
     // Response Headers
     header("Access-Control-Allow-Origin: *");
@@ -11,16 +11,9 @@
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-    $user_obj = new User();
-
-    $users = $user_obj->get_all_users();
-
-    $response['message'] = 'Welcome, to Weather-API Project. If a User Object is returned, then your API did NOT face any errors.';
-    $response['user'] = $users;
-
+    $data_collector = new DataCollector();
+    $response = $data_collector->get_weather_data('thtdhd');
     $response = json_encode($response);
-
     print_r($response);
-
 ?>
 

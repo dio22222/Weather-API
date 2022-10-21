@@ -16,13 +16,15 @@ class User extends Base {
 
         $user = $this->get_id_and_password($username);
 
-        if(password_verify($password, $user['password'])) {
-
-            return $user['id'];
-
-        } else {
+        if ($user == false) {
 
             return false;
+        
+        }
+        
+        if (password_verify($password, $user['password'])) {
+
+            return $user['id'];
 
         }
 

@@ -1,11 +1,11 @@
 # Weather-API
 A RESTful API written in PHP that provides you with Weather Forecast for over 200,000 cities &amp; Historical Weather Data Search for All Major Greek Cities, using the power of Open Weather Map API.
 
-# Dependencies
+### Dependencies
  - "firebase/php-jwt"
  > You can install it with this command: composer require firebase/php-jwt
 
-# Build Instructions
+### Build Instructions
 Your Project must inlclude:
 A "db_config.json" file inside the top-level folder "config" with your database configuration.
 

@@ -58,3 +58,5 @@
     $response = json_encode($response);
 
     print_r($response);
+
+?>

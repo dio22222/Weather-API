@@ -8,6 +8,7 @@ namespace WeatherAPI;
 
 use PDO;
 use Configuration\Configuration;
+use PDOException;
 
 class Base {
     
@@ -37,8 +38,13 @@ class Base {
         $databaseConfig = $config->getConfig()['database'];
 
         // Connect with database
-        self::$pdo = new PDO(sprintf('mysql:host=%s;dbname=%s;charset=UTF8', $databaseConfig['host'], $databaseConfig['dbname']),
-            $databaseConfig['username'], $databaseConfig['password'], [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"]);    
+        try {
+            self::$pdo = new PDO(sprintf('mysql:host=%s;dbname=%s;charset=UTF8', $databaseConfig['host'], $databaseConfig['dbname']),
+                $databaseConfig['username'], $databaseConfig['password'], [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"]);  
+        } catch (PDOException $e) {
+            return false;
+            exit();
+        }  
     
     }
 
@@ -78,46 +84,57 @@ class Base {
 
     protected function insert($table_name, $parameters) {
 
-        // Construct SQL Query
-        $query = "INSERT INTO {$table_name} (";
+            // Construct SQL Query
+            $query = "INSERT INTO {$table_name} (";
 
-        $i = 0;
-        foreach($parameters as $key => $value) {
+            $i = 0;
+            foreach($parameters as $key => $value) {
 
-            $query .= $key;
+                $query .= $key;
 
-            if (++$i !== count($parameters)) {
-                $query .= ',';
-            }
-        }
-
-        $query .= ") VALUES (";
-
-        $i = 0;
-        foreach($parameters as $key => $value) {
-
-            $query .= ':' . $key;
-
-            if (++$i !== count($parameters)) {
-                $query .= ',';
+                if (++$i !== count($parameters)) {
+                    $query .= ',';
+                }
             }
 
-        }
+            $query .= ") VALUES (";
 
-        $query .= ')';
+            $i = 0;
+            foreach($parameters as $key => $value) {
 
-        var_dump($query);
+                $query .= ':' . $key;
 
-        // Prepare Statement
-        $statement = $this->getPDO()->prepare($query);
+                if (++$i !== count($parameters)) {
+                    $query .= ',';
+                }
 
-        // Bind Parameters
-        foreach ($parameters as $key => &$value) {
-            $statement->bindParam($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
-        }
+            }
 
-        // Execute Statement
-        $success = $statement->execute();
+            $query .= ')';
+
+            $pdo = $this->getPDO();
+
+            // Check if there was an Error with the Database
+            if ($pdo != null) {
+
+                // Prepare Statement
+                $statement = $this->getPDO()->prepare($query);
+
+            } else {
+
+                return false;
+
+            }
+
+            // Bind Parameters
+            foreach ($parameters as $key => &$value) {
+                $statement->bindParam($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
+
+            // Execute Statement
+            $success = $statement->execute();
+
+            return $success;
 
     }
 

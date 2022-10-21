@@ -73,7 +73,7 @@
             );
 
             // Construct Results Array to Be saved in the Database
-            $results = array(
+            $parameters = array(
 
                 'date' => $this->convert_unix_to_date($response['dt']),
                 'temp_kelvin' => $response['main']['temp']['kelvin'],
@@ -97,7 +97,9 @@
 
             );
 
-            return $results;
+            $this->insert('forecast', $parameters);
+
+            return $parameters;
 
         }
 

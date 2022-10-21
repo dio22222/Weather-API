@@ -45,6 +45,8 @@
                     break;
 
                 case Endpoint::weather:
+                    // Invoke Base Constructor to get PDO & Work with Database 
+                    parent::__construct();
                     $query = $base_url . 'weather?&q=' . $parameters['city'];
                     break;
 

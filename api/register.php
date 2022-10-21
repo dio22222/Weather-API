@@ -26,7 +26,26 @@
 
     }
 
-    if (!isset($_GET['username'])) {
+    // Get Request
+    $request = file_get_contents("php://input");
+
+    // Only Accept Valid JSON formated Requests
+    if (!isValidJSON($request)) {
+
+        $response['message'] = 'Invalid JSON';
+
+        $response = json_encode($response);
+
+        print_r($response);
+
+        exit();
+
+    }
+
+    // Decode Request
+    $request_decoded = json_decode($request, true);
+
+    if (!isset($request_decoded['username'])) {
 
         $response['message'] = 'Username parameter missing.';
 
@@ -38,7 +57,7 @@
 
     }
 
-    if (!isset($_GET['email'])) {
+    if (!isset($request_decoded['email'])) {
 
         $response['message'] = 'Email parameter missing.';
 
@@ -50,7 +69,7 @@
 
     }
 
-    if (!isset($_GET['password'])) {
+    if (!isset($request_decoded['password'])) {
 
         $response['message'] = 'Password parameter missing.';
 
@@ -62,7 +81,7 @@
 
     }
 
-    if (!isset($_GET['password-repeat'])) {
+    if (!isset($request_decoded['password-repeat'])) {
 
         $response['message'] = 'Password-repeat parameter missing.';
 
@@ -76,7 +95,7 @@
 
     $user = new User();
 
-    $response = $user->register($_GET['username'], $_GET['email'], $_GET['password'], $_GET['password-repeat']);
+    $response = $user->register($request_decoded['username'], $request_decoded['email'], $request_decoded['password'], $request_decoded['password-repeat']);
 
     http_response_code($response['code']);
     unset($response['code']);
@@ -84,5 +103,13 @@
     $response = json_encode($response);
 
     print_r($response);
+    
+    // Functions
+    function isValidJSON($request) {
 
+        json_decode($request, true);
+
+        return json_last_error() == JSON_ERROR_NONE;
+
+    }
 ?>

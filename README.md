@@ -101,4 +101,4 @@ https://domain-name.com/Weather-API/api/meanmedian.php?city=athens
 ```
 
 #### Data Collection
-Data Collection for Historical Weather Data is collected by the `/scripts/collect_data.php` script. That script is built with the intention of creating a CRON command that runs it once a day.
+Data Collection for Historical Weather Data is collected by the `/scripts/collect_data.php` script. That script is built with the intention of creating a CRON command that runs it once per day.
